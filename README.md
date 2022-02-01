@@ -1,2 +1,3 @@
 # Specdefender
-Tool to dynamically defend against spectre attack
+Tool to dynamically defend against spectre attack.
+
