@@ -14,12 +14,7 @@ class Detector:
         self.counter = Counter(name,pid)
         self.model = pickle.load(open(trained_model, 'rb'))
 
-    def __preprocess():
-        # Load the dataset
-        fields = ['value', 'perf']
-        data_attack = pd.read_csv(data_file, skipinitialspace=True, usecols=fields, sep = ", ", engine='python')
-        #print(data_attack.head())
-        
+    def _preprocess(self, data_attack):
         c = 'perf'
         data_new = data_attack.set_index([data_attack.groupby(c).cumcount() + 1, c]).unstack().sort_index(1, 1)
         data_new.columns = data_new.columns.droplevel(0)
@@ -37,10 +32,11 @@ class Detector:
         data_new['spec_load'] = data_new['ldst_spec'].truediv(data_new['ldst_spec'].max())
         
         X_test = data_new[['cache_miss_rate','spec_load']]
+        return X_test
 
-    def _detect():
+    def _detect(self, X_test):
         # Predict
-        loaded_model = pickle.load(open(trained_model, 'rb'))
+        loaded_model = self.model
         preds = loaded_model.predict(X_test)
         spectre_prob = preds.mean()
         if spectre_prob > 0.70:
@@ -48,27 +44,22 @@ class Detector:
         else:
             print ("safe execution..", 100-spectre_prob*100,"%")
 
-    def _start_detector(self, poll_timeout):
-        print(poll_timeout)
+    def _start_detector(self, data):
         t = threading.currentThread()
-        while getattr(t, "do_run", True):
-            self.counter.start(poll_timeout)
-            self.counter.get_data()
-            self.counter.clear_data()
-            self.counter.stop()
-        self.counter.stop()
+        processed_data = self._preprocess(data)
+        result = self._detect(processed_data)
 
     def start(self, timeout):
-        poll_time = 5
-        proc = subprocess.Popen(["perf stat -x ', ' -e armv8_cortex_a72/br_mis_pred/,armv8_cortex_a72/br_pred/,cache-misses,cache-references,ldst_spec -I 10 -a"], shell=True)
-        time.sleep(2) 
-        proc.terminate()
-        #t = threading.Thread(target=self._start_detector, args=(poll_time,))
-        #t.start()
-        #counter.stop()
+        poll_time = timeout
+        while True:
+            self.counter.run(poll_time)
+            data = self.counter.get_data()
+            #self.counter.clear_data()
+            t = threading.Thread(target=self._start_detector, args=(data,))
+            t.start()
+            t.join()
+            time.sleep(2) 
 
-        #time.sleep(timeout)
-        #t.do_run = False
         print('exit start()')
         return 0
 
@@ -78,8 +69,7 @@ class Detector:
 
 def main(argv):
     trained_model = 'finalized_model.sav'
-    #data_file = '../data/data.csv'
-    data_file = '../data/normal.csv'
+    data_file = '../data/data.csv'
     timeout = 20
     try:
         opts, args = getopt.getopt(argv,"ht:p:",["timeout=","pid="])
