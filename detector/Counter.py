@@ -1,6 +1,7 @@
 import pandas as pd
 
 import subprocess
+from subprocess import Popen, PIPE
 import threading
 import ctypes
 import time
@@ -22,12 +23,16 @@ class Counter:
     def run(self, timeout):
         command = "perf stat -x ', ' -e armv8_cortex_a72/br_mis_pred/,armv8_cortex_a72/br_pred/,cache-misses,cache-references,ldst_spec -I 100 -p "+ str(self.pid) + " 2>&1 | tee " + self.filename
         print(command)
-        proc = subprocess.Popen([command], shell = True)
+        proc = subprocess.Popen([command], stdout=PIPE, shell = True, stderr=PIPE)
+        #print("retcode =",proc)
+        #output = output.decode() 
+        #if "Error" in output:
+        #    return False
+
         time.sleep(timeout)
         for proc in psutil.process_iter():
             # check whether the process name matches
-            if any(procstr in proc.name() for procstr in\
-                ['perf']):
+            if any(procstr in proc.name() for procstr in ['perf']):
                 print(f'Killing {proc.name()}')
                 proc.kill()
         cols ='value, empty, perf, temp1, temp2, temp3' 
