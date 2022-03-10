@@ -84,9 +84,6 @@ void test0(size_t x) {
 #endif
         	if ((float) x / (float) array1_size < 1) {
 			BARRIER
-			//asm volatile("DSB LD\n\t");
-			//asm volatile("DSB ST\n\t");
-
             		temp &= array2[array1[x] * PAGESIZE];
 		}
 #if 1
