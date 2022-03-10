@@ -21,7 +21,7 @@ class Counter:
 
     # start counter thread
     def run(self, timeout):
-        command = "perf stat -x ', ' -e armv8_cortex_a72/br_mis_pred/,armv8_cortex_a72/br_pred/,cache-misses,cache-references,ldst_spec -I 100 -p "+ str(self.pid) + " 2>&1 | tee " + self.filename
+        command = "perf stat -x ', ' -e cache-misses,cache-references,ldst_spec -I 100 -p "+ str(self.pid) + " 2>&1 | tee " + self.filename
         print(command)
         proc = subprocess.Popen([command], stdout=PIPE, shell = True, stderr=PIPE)
         #print("retcode =",proc)
@@ -35,7 +35,8 @@ class Counter:
             if any(procstr in proc.name() for procstr in ['perf']):
                 print(f'Killing {proc.name()}')
                 proc.kill()
-        cols ='value, empty, perf, temp1, temp2, temp3' 
+        #cols ='value, empty, perf, temp1, temp2, temp3' 
+        cols ='empty, value, temp1, perf, temp2, temp3, temp4, temp5' 
         self.line_prepender(self.filename, cols)
 
     # read file and return array
