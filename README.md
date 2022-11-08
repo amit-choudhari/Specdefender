@@ -31,7 +31,7 @@ In presence of SpecDefender, when a process is attacked by spectre it transition
 ![State Diagram](https://github.com/amitsirius/Specdefender/blob/main/images/specdefender\_state.PNG?raw=true)
 ## Usage
 Run the detector.py file along with sample spectre test code from /test directory.
-![Usage](https://github.com/amitsirius/Specdefender/blob/main/images/specdefender\_usage.PNG?raw=true)
+![Usage](https://github.com/amitsirius/Specdefender/blob/main/images/specdefender\_usage.png?raw=true)
 ## Original paper
 
 ```
