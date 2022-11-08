@@ -1,5 +1,4 @@
-# Specdefender
-![Icon](https://github.com/amitsirius/Specdefender/blob/main/images/icon.png?raw=true)
+# Specdefender <img src="https://github.com/amit-choudhari/Specdefender/blob/main/images/icon.png" width=20% height=20%>
 Tool to dynamically defend against spectre attack.
 
 ![Class Diagram](https://github.com/amitsirius/Specdefender/blob/main/images/specdefender\_class\_diagram.png?raw=true)
