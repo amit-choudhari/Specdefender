@@ -1,7 +1,7 @@
 <img src="https://github.com/amit-choudhari/Specdefender/blob/main/images/icon.png" width=20% height=20%>
 # Specdefender
 Static defences against spectre such as load barriers, Retpoline, etc suffers the performance of the process. And dynmaic defences mostly attempt to kill the process. We propose a tool that aims to bring a balance between performance, security and availability. SpecDefender is a tool that dynamically defend against spectre attack.
-![Modules](https://github.com/amitsirius/Specdefender/blob/main/images/specdefender\_modules.png?raw=true)
+![Modules](https://github.com/amitsirius/Specdefender/blob/main/images/specdefender\_modules.PNG?raw=true)
 ## Table of contents
 * [General info](#general-info)
 * [Core components](#core-components)
@@ -31,7 +31,7 @@ In presence of SpecDefender, when a process is attacked by spectre it transition
 ![State Diagram](https://github.com/amitsirius/Specdefender/blob/main/images/specdefender\_state.PNG?raw=true)
 ## Usage
 Run the detector.py file along with sample spectre test code from /test directory.
-![usage](https://github.com/amitsirius/Specdefender/blob/main/images/specdefender\_usage.PNG?raw=true)
+![Usage](https://github.com/amitsirius/Specdefender/blob/main/images/specdefender\_usage.PNG?raw=true)
 ## Original paper
 
 ```
